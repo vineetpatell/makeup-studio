@@ -1,0 +1,149 @@
+/*
+ * Inner-page content blocks: split layouts, chapters, lists, services,
+ * courses, portfolio studies.
+ * Imported by styles.css.
+ */
+.pg-image { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--secondary); }
+.pg-image .editorial-image { width: 100%; height: 100%; }
+.pg-image-label { position: absolute; left: 14px; bottom: 12px; z-index: 2; padding: 5px 9px; background: oklch(.12 .01 45 / 72%); color: var(--chapter-gold); font-size: 7px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+.pg-mobile-position { display: none; }
+.pg-image.has-mobile-crop .editorial-image img { object-position: var(--pg-mobile-position); }
+
+/* Split layouts */
+.pg-split { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: clamp(28px, 5vw, 84px); }
+.pg-split.is-reverse .pg-split-media { order: 2; }
+.pg-split-media { min-width: 0; }
+.pg-split-copy { min-width: 0; }
+.pg-split-copy .pg-heading { margin-bottom: 22px; }
+.pg-split-media .pg-grid { margin: 0; }
+
+/* Chapters (studio spaces) */
+.pg-chapters { display: grid; gap: clamp(46px, 6vw, 100px); }
+.pg-chapter { display: grid; grid-template-columns: 1.15fr 1fr; align-items: center; gap: clamp(24px, 4vw, 70px); }
+.pg-chapter.is-reverse .pg-chapter-media { order: 2; }
+.pg-chapter-media { position: relative; height: clamp(300px, 40vw, 560px); }
+.pg-chapter-copy h3 { margin: 14px 0 0; font-size: clamp(30px, 3.2vw, 52px); line-height: 1; }
+.pg-chapter-copy .pg-muted { margin: 18px 0 0; max-width: 460px; }
+.pg-chapter-index { display: block; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 20px; color: var(--chapter-gold); margin-bottom: 10px; }
+
+/* Numbered content lists */
+.pg-area-list, .pg-flow, .pg-experience-list, .pg-learn-list { margin: 0; padding: 0; list-style: none; }
+.pg-area-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 54px; border-top: 1px solid var(--border); }
+.pg-area { display: grid; grid-template-columns: 46px 1fr; gap: 16px; padding: 24px 0; border-bottom: 1px solid var(--border); }
+.pg-area-index, .pg-flow-index, .pg-experience-index { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 19px; color: var(--chapter-gold); }
+.pg-area h3 { margin: 0; font-size: clamp(20px, 1.8vw, 27px); line-height: 1.1; }
+.pg-area p { margin: 8px 0 0; color: var(--chapter-muted); font-size: 12px; }
+.pg-flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; }
+.pg-flow-step { border-top: 1px solid var(--border); padding-top: 20px; }
+.pg-flow-step h3 { margin: 14px 0 0; font-size: clamp(20px, 1.9vw, 29px); }
+.pg-flow-step p { margin: 12px 0 0; color: var(--chapter-muted); font-size: 12px; }
+.pg-experience-list { border-top: 1px solid var(--border); }
+.pg-experience-step { display: grid; grid-template-columns: 66px 1fr; gap: 20px; align-items: baseline; padding: 26px 0; border-bottom: 1px solid var(--border); }
+.pg-experience-step h3 { margin: 0; font-size: clamp(22px, 2.2vw, 33px); letter-spacing: .06em; }
+.pg-experience-step p { margin: 10px 0 0; color: var(--chapter-muted); font-size: 13px; max-width: 720px; }
+.pg-chip-list { display: flex; flex-wrap: wrap; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.pg-chip { display: inline-flex; align-items: center; gap: 10px; padding: 12px 18px; border: 1px solid var(--border); color: var(--chapter-ink); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+.pg-chip span { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 15px; color: var(--chapter-gold); letter-spacing: 0; }
+.pg-learn-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 54px; margin-top: 40px; border-top: 1px solid var(--border); }
+.pg-learn-item { display: grid; grid-template-columns: 46px 1fr; gap: 14px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid var(--border); }
+.pg-learn-item span { font-family: 'Cormorant Garamond', Georgia, serif; color: var(--chapter-gold); font-size: 17px; }
+.pg-learn-item p { margin: 0; font-size: 14px; }
+.pg-course-learn { margin-top: clamp(48px, 5vw, 86px); }
+/* Services */
+.pg-service-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 66px 22px; }
+.pg-service-card { grid-column: span 4; display: block; min-width: 0; color: var(--chapter-ink); text-decoration: none; }
+.pg-service-card.is-wide { grid-column: span 6; }
+.pg-service-card.is-narrow { grid-column: span 3; }
+.pg-service-image { height: clamp(330px, 38vw, 540px); overflow: hidden; background: var(--muted); }
+.pg-service-card.is-narrow .pg-service-image { height: clamp(280px, 29vw, 430px); margin-top: 48px; }
+.pg-service-card .editorial-image img { transition: transform .75s cubic-bezier(.2,.7,.2,1); }
+.pg-service-card:hover .editorial-image img { transform: scale(1.055); }
+.pg-service-card .service-meta { border-top: 1px solid var(--border); padding: 18px 0 0; margin-top: 15px; display: grid; grid-template-columns: 35px 1fr 22px; gap: 10px; align-items: start; }
+.pg-service-card .service-meta h3 { margin: 0; font-size: clamp(25px, 2.2vw, 36px); line-height: 1; }
+.pg-service-card .service-meta p { margin: 9px 0 0; color: var(--chapter-muted); font-size: 11px; }
+.service-index { color: var(--chapter-gold); font-family: 'Cormorant Garamond', Georgia, serif; font-size: 20px; }
+.pg-service-card .service-meta svg, .pg-service-meta svg { color: var(--chapter-gold); transition: transform .25s ease; }
+.pg-service-card:hover .service-meta svg { transform: translate(3px,-3px); }
+.pg-service-meta { border-top: 1px solid var(--border); padding: 16px 0; display: grid; grid-template-columns: 35px 1fr 22px; gap: 12px; align-items: start; color: var(--chapter-ink); text-decoration: none; }
+.pg-service-meta h3 { margin: 0; font-size: clamp(20px, 1.9vw, 28px); line-height: 1.05; }
+.pg-service-meta p { margin: 8px 0 0; color: var(--chapter-muted); font-size: 11px; }
+.pg-service-meta:hover { color: var(--chapter-gold); }
+.pg-service-notes, .pg-service-notes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px clamp(28px, 4vw, 60px); }
+.service-includes { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+.service-includes li { display: grid; grid-template-columns: 20px 1fr; gap: 10px; color: var(--chapter-muted); font-size: 13px; }
+.service-includes li::before { content: '—'; color: var(--chapter-gold); }
+.pg-service-notes .pg-muted.is-small { font-size: 11px; }
+.pg-note-band { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--border); }
+.pg-note-label { display: block; color: var(--chapter-gold); font-size: 9px; letter-spacing: .18em; }
+.pg-note-band p { margin: 9px 0 0; color: var(--chapter-muted); font-size: 12px; }
+.pg-service-detail-shot { min-width: 0; }
+.pg-academy-cross, .pg-transformation, .pg-related, .pg-archive-faq { border-top: 1px solid var(--border); }
+
+/* Before / after comparison */
+.pg-ba { min-width: 0; }
+.pg-ba-head { margin-bottom: 18px; }
+.pg-ba-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(28px, 4vw, 54px); margin-top: 36px; }
+.pg-ba-frame { position: relative; height: clamp(300px, 38vw, 520px); overflow: hidden; background: var(--secondary); }
+.pg-ba-layer { position: absolute; inset: 0; }
+.pg-ba-layer > .pg-image { height: 100%; }
+.pg-ba-handle { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--chapter-gold); }
+.pg-ba-handle span { position: absolute; top: 50%; left: 50%; width: 30px; height: 30px; margin: -15px 0 0 -15px; border: 1px solid var(--chapter-gold); border-radius: 50%; background: oklch(.13 .01 45 / 70%); }
+.pg-ba-tag { position: absolute; bottom: 14px; padding: 5px 9px; background: oklch(.12 .01 45 / 74%); color: var(--chapter-gold); font-size: 7px; letter-spacing: .16em; }
+.pg-ba-tag.is-before-tag { left: 14px; }
+.pg-ba-tag.is-after-tag { right: 14px; }
+.pg-ba-control { display: block; margin-top: 14px; }
+.pg-ba-control input { width: 100%; accent-color: var(--chapter-gold); }
+.pg-ba-caption { margin: 10px 0 0; color: var(--chapter-muted); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; }
+/* Courses */
+.pg-course-list-grid { border-top: 1px solid var(--border); }
+.pg-course-row { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(24px, 4vw, 66px); align-items: center; padding: 34px 0; border-bottom: 1px solid var(--border); }
+.pg-course-media { height: clamp(260px, 30vw, 440px); }
+.pg-course-title { margin: 12px 0 0; font-size: clamp(28px, 3vw, 46px); line-height: 1; }
+.pg-course-index, .pg-chapter-index, .pg-study-index { font-family: 'Cormorant Garamond', Georgia, serif; color: var(--chapter-gold); font-size: 19px; }
+.pg-course-copy .pg-muted { margin: 16px 0 0; }
+.pg-course-details { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 22px; margin: 24px 0 22px; }
+.pg-course-details div { border-top: 1px solid var(--border); padding-top: 12px; }
+.pg-course-details.is-stacked { grid-template-columns: 1fr; }
+.pg-course-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 54px 20px; }
+.pg-course-card { grid-column: span 3; display: block; min-width: 0; color: var(--chapter-ink); text-decoration: none; }
+.pg-course-card.span-1, .pg-course-card.span-4 { grid-column: span 6; }
+.pg-course-grid.is-compact .pg-course-card { grid-column: span 4; }
+.pg-course-card-media { height: clamp(250px, 28vw, 420px); overflow: hidden; background: var(--muted); }
+.pg-course-card-media .editorial-image img { transition: transform .7s cubic-bezier(.2,.7,.2,1); }
+.pg-course-card:hover .pg-course-card-media .editorial-image img { transform: scale(1.05); }
+.pg-course-card-meta { display: grid; gap: 9px; margin-top: 14px; padding-top: 16px; border-top: 1px solid var(--border); }
+.pg-course-card-meta span { color: var(--chapter-gold); font-size: 9px; letter-spacing: .18em; text-transform: uppercase; }
+.pg-course-card-meta h3 { margin: 0; font-size: clamp(21px, 2vw, 30px); line-height: 1.05; }
+.pg-course-card-meta p { margin: 0; color: var(--chapter-muted); font-size: 11px; }
+.pg-course-card-meta svg { color: var(--chapter-gold); }
+
+/* Portfolio studies */
+.pg-study-list { display: grid; gap: clamp(52px, 7vw, 110px); }
+.pg-study { display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; gap: clamp(26px, 4vw, 70px); }
+.pg-study.is-reverse .pg-study-media { order: 2; }
+.pg-study-media { height: clamp(320px, 44vw, 620px); }
+.pg-study-title { margin: 12px 0 0; font-size: clamp(30px, 3.4vw, 54px); line-height: .98; }
+.pg-study-category { margin: 10px 0 16px; color: var(--chapter-gold); font-size: 9px; letter-spacing: .18em; text-transform: uppercase; }
+.pg-study-facts { display: grid; gap: 14px; margin: 24px 0 26px; }
+.pg-study-facts div { border-top: 1px solid var(--border); padding-top: 12px; }
+.pg-study-detail .pg-split-media { height: clamp(320px, 42vw, 600px); }
+
+/* Principles / artistry footers (about page) */
+.pg-principle-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.pg-principle { padding: 26px 22px; border: 1px solid var(--border); }
+.pg-principle-number { display: block; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 20px; color: var(--chapter-gold); }
+.pg-principle h3 { margin: 16px 0 0; font-size: clamp(22px, 2.2vw, 32px); }
+.pg-principle p { margin: 12px 0 0; color: var(--chapter-muted); font-size: 12px; }
+.pg-artistry-foot { display: grid; grid-template-columns: 0.8fr 1.2fr; align-items: center; gap: clamp(24px, 4vw, 60px); margin-top: clamp(40px, 5vw, 76px); }
+.pg-artistry-detail { height: clamp(260px, 32vw, 480px); }
+.pg-education { border-top: 1px solid var(--border); }
+.pg-practice, .pg-areas, .pg-academy-courses, .pg-course-flow, .pg-course-outcome, .pg-student-preview, .pg-student-notes, .pg-student-next, .pg-experience, .pg-studio-extras, .pg-work-approach, .pg-work-grid, .pg-booking-flow, .pg-booking-strip, .pg-study-gallery, .pg-student-archive, .pg-contact-details, .pg-chapters { border-top: 1px solid var(--border); }
+/* Remaining section hooks */
+.pg-artistry, .pg-principles, .pg-spaces, .pg-studio-visit, .pg-work-index, .pg-booking { border-top: 1px solid var(--border); }
+.pg-contact-form { min-width: 0; }
+.pg-study-copy { min-width: 0; }
+.pg-study-copy .pg-heading { margin-bottom: 16px; }
+.service-look, .service-transformation { min-width: 0; }
+.service-look .pg-grid, .service-transformation .pg-ba { margin-top: 34px; }
+.pg-muted.is-small { font-size: 11px; }
+

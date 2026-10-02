@@ -1,0 +1,380 @@
+/*
+ * Floating capsule navigation.
+ *
+ * A premium pill that hovers above the content: monogram left, primary nav
+ * centred, booking pill right. Replaces the old full-width rectangular header on
+ * both the homepage and the inner pages.
+ *
+ * Visibility is a pure-CSS response to `data-nav-visible` (toggled by the
+ * ScrollTrigger in lib/use-nav-visibility.ts) so the reveal costs no extra
+ * script and collapses to an instant, opacity-only change under reduced motion.
+ */
+
+.lux-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  display: flex;
+  justify-content: center;
+  padding-top: 18px;
+  /* The wrapper never eats clicks; only the pill itself is interactive. */
+  pointer-events: none;
+}
+
+.lux-nav-inner {
+  pointer-events: auto;
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 20px;
+  width: min(1272px, calc(100% - 32px));
+  height: 68px;
+  padding: 0 12px 0 26px;
+  border-radius: 999px;
+  background: oklch(0.1694 0.0095 43 / 0.82);
+  border: 1px solid var(--lux-line);
+  backdrop-filter: blur(20px) saturate(130%);
+  -webkit-backdrop-filter: blur(20px) saturate(130%);
+  box-shadow:
+    0 22px 54px -26px oklch(0 0 0 / 0.85),
+    inset 0 1px 0 oklch(0.9513 0.0136 78.3 / 0.07);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px) scale(0.98);
+  transition:
+    opacity 0.62s var(--lux-ease),
+    transform 0.62s var(--lux-ease),
+    visibility 0.62s;
+}
+
+/* `visibility` flips on the way in immediately and on the way out at the end,
+   so the pill never disappears mid-transition nor blocks the hero while hidden. */
+.lux-nav[data-nav-visible='true'] .lux-nav-inner {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+/* Brand ------------------------------------------------------------------ */
+/* Brand mark ----------------------------------------------------------------
+   The monogram is the logo: the display face at wide tracking carries the
+   identity, with the champagne dot as the only ornament. */
+.lux-brand {
+  font-family: var(--font-display, "Syne", "Manrope", system-ui, sans-serif);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  color: var(--lux-ivory, #f4eee5);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.lux-brand span {
+  color: var(--lux-champagne);
+}
+
+/* Centre nav ------------------------------------------------------------- */
+.lux-nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(13px, 1.85vw, 28px);
+}
+
+.lux-nav-link {
+  position: relative;
+  padding: 6px 2px 7px;
+  color: var(--lux-ivory);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  opacity: 0.74;
+  transition: opacity 0.3s ease, color 0.3s ease;
+}
+
+/* Underline grows from the centre — no bounce, no colour block. */
+.lux-nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--lux-champagne);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.42s var(--lux-ease);
+}
+
+.lux-nav-link:hover,
+.lux-nav-link:focus-visible,
+.lux-nav-link.is-active {
+  color: var(--lux-champagne);
+  opacity: 1;
+}
+
+.lux-nav-link:hover::after,
+.lux-nav-link:focus-visible::after,
+.lux-nav-link.is-active::after {
+  transform: scaleX(1);
+}
+
+/* Booking CTA ------------------------------------------------------------ */
+.lux-nav-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.lux-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  height: 46px;
+  padding-inline: 20px;
+  border-radius: 999px;
+  background: var(--lux-champagne);
+  color: oklch(0.1433 0.0059 41);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    transform 0.34s var(--lux-ease),
+    background-color 0.34s ease,
+    box-shadow 0.34s ease;
+}
+
+.lux-cta svg {
+  transition: transform 0.34s var(--lux-ease);
+}
+
+.lux-cta:hover,
+.lux-cta:focus-visible {
+  background: var(--lux-ivory);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px -14px oklch(0.7392 0.0872 78 / 0.6);
+}
+
+.lux-cta:hover svg,
+.lux-cta:focus-visible svg {
+  transform: translate(3px, -3px);
+}
+
+
+/* Mobile pill button ----------------------------------------------------- */
+.lux-menu-button {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding-inline: 16px;
+  border: 1px solid var(--lux-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--lux-ivory);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  cursor: pointer;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.lux-menu-button:hover,
+.lux-menu-button:focus-visible {
+  border-color: var(--lux-champagne);
+  color: var(--lux-champagne);
+}
+
+/* Mobile panel ----------------------------------------------------------- */
+.lux-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 210;
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+  padding: 118px clamp(22px, 6vw, 44px) 40px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background:
+    radial-gradient(120% 70% at 82% 0%, oklch(0.1918 0.014 34.4 / 0.9), transparent 62%),
+    linear-gradient(180deg, oklch(0.1433 0.0059 41), oklch(0.11 0.005 40));
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-14px);
+  transition:
+    opacity 0.42s var(--lux-ease),
+    transform 0.42s var(--lux-ease),
+    visibility 0.42s;
+}
+
+.lux-menu[data-state='open'] {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.lux-menu-list {
+  display: grid;
+}
+
+.lux-menu-link {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--lux-line-soft);
+  color: var(--lux-ivory);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(30px, 8.5vw, 44px);
+  line-height: 1.06;
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.5s var(--lux-ease), transform 0.5s var(--lux-ease), color 0.3s ease;
+}
+
+.lux-menu-index {
+  color: var(--lux-champagne);
+  font-family: Manrope, system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+}
+
+.lux-menu-link.is-active,
+.lux-menu-link:hover,
+.lux-menu-link:focus-visible {
+  color: var(--lux-champagne);
+}
+
+/* Editorial stagger — only while opening. */
+.lux-menu[data-state='open'] .lux-menu-link {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.lux-menu[data-state='open'] .lux-menu-link:nth-child(1) { transition-delay: 0.06s; }
+.lux-menu[data-state='open'] .lux-menu-link:nth-child(2) { transition-delay: 0.1s; }
+.lux-menu[data-state='open'] .lux-menu-link:nth-child(3) { transition-delay: 0.14s; }
+.lux-menu[data-state='open'] .lux-menu-link:nth-child(4) { transition-delay: 0.18s; }
+.lux-menu[data-state='open'] .lux-menu-link:nth-child(5) { transition-delay: 0.22s; }
+.lux-menu[data-state='open'] .lux-menu-link:nth-child(6) { transition-delay: 0.26s; }
+.lux-menu[data-state='open'] .lux-menu-link:nth-child(7) { transition-delay: 0.3s; }
+.lux-menu[data-state='open'] .lux-menu-link:nth-child(8) { transition-delay: 0.34s; }
+
+.lux-menu-heading {
+  display: block;
+  margin-bottom: 14px;
+  color: var(--lux-champagne);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+}
+
+.lux-menu-services > div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 18px;
+}
+
+.lux-menu-services a {
+  color: var(--lux-muted-2);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.lux-menu-services a:hover,
+.lux-menu-services a:focus-visible {
+  color: var(--lux-champagne);
+}
+
+.lux-menu-actions {
+  display: grid;
+  gap: 14px;
+  margin-top: auto;
+  padding-top: 26px;
+  border-top: 1px solid var(--lux-line-soft);
+}
+
+.lux-cta-block {
+  justify-content: center;
+  height: 54px;
+}
+
+.lux-menu-alt {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 50px;
+  border: 1px solid var(--lux-line);
+  border-radius: 999px;
+  color: var(--lux-ivory);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-decoration: none;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.lux-menu-alt:hover,
+.lux-menu-alt:focus-visible {
+  border-color: var(--lux-champagne);
+  color: var(--lux-champagne);
+}
+
+/* Below 1024px the pill becomes a monogram + menu capsule. ---------------- */
+@media (max-width: 1023px) {
+  .lux-nav-links,
+  .lux-nav-actions .lux-cta {
+    display: none;
+  }
+
+  .lux-nav-inner {
+    grid-template-columns: 1fr auto;
+    height: 58px;
+    padding: 0 10px 0 20px;
+  }
+
+  .lux-menu-button {
+    display: inline-flex;
+  }
+}
+
+@media (max-width: 400px) {
+  .lux-menu-button-label {
+    display: none;
+  }
+
+  .lux-menu-button {
+    padding-inline: 15px;
+  }
+}
+
+/* Reduced motion: the pill still appears and disappears, it just does not
+   travel, scale or fade over time. */
+@media (prefers-reduced-motion: reduce) {
+  .lux-nav-inner,
+  .lux-menu,
+  .lux-menu-link {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .lux-menu-link {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,153 @@
+/*
+ * Inner-page forms, contact, booking, FAQ, CTA and legal blocks.
+ * Imported by styles.css.
+ */
+.pg-form { width: 100%; }
+.pg-form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px 20px; }
+.pg-field { display: flex; flex-direction: column; min-width: 0; }
+.pg-field:has(.pg-textarea) { grid-column: 1 / -1; }
+.pg-field-label { margin-bottom: 9px; color: var(--chapter-muted); font-size: 9px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+.pg-field-label span { color: var(--chapter-gold); }
+.pg-input, .pg-select, .pg-textarea { width: 100%; min-height: 50px; padding: 13px 14px; background: oklch(.19 .012 46); border: 1px solid var(--border); border-radius: 0; color: var(--chapter-ink); font-family: inherit; font-size: 13px; transition: border-color .25s ease, background-color .25s ease; }
+.pg-textarea { min-height: 128px; resize: vertical; }
+.pg-input:focus-visible, .pg-select:focus-visible, .pg-textarea:focus-visible { outline: none; border-color: var(--chapter-gold); background: oklch(.22 .014 47); }
+.pg-field.has-error .pg-input, .pg-field.has-error .pg-select, .pg-field.has-error .pg-textarea { border-color: oklch(.63 .18 25); }
+.pg-field-hint { margin: 7px 0 0; color: var(--chapter-muted); font-size: 10px; }
+.pg-field-error { margin: 7px 0 0; color: oklch(.75 .14 28); font-size: 10px; letter-spacing: .04em; }
+.pg-form-submit { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; margin-top: 30px; }
+.pg-form-note { margin: 0; color: var(--chapter-muted); font-size: 10px; letter-spacing: .08em; max-width: 420px; }
+.pg-form-success { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; padding: 30px; border: 1px solid var(--border); background: oklch(.18 .012 46); }
+.pg-form-success h3 { margin: 0; font-size: clamp(24px, 2.6vw, 38px); }
+.pg-form-success-mark { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--chapter-gold); color: var(--chapter-gold); border-radius: 50%; }
+.pg-form-summary { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 24px; margin: 8px 0 0; width: 100%; }
+.pg-form-summary div { border-top: 1px solid var(--border); padding-top: 10px; }
+.pg-form-summary dt { color: var(--chapter-muted); font-size: 9px; letter-spacing: .16em; text-transform: uppercase; }
+.pg-form-summary dd { margin: 6px 0 0; font-size: 13px; }
+.pg-form-success-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+.pg-enquiry-summary, .pg-booking-form, .pg-booking-note, .pg-artistry, .pg-education, .pg-directory, .pg-principles, .pg-principle-grid { min-width: 0; }
+
+/* Contact + booking layout */
+.pg-contact-layout { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(32px, 5vw, 84px); align-items: start; }
+.pg-contact-intro .pg-heading { margin-bottom: 20px; }
+.pg-channel-list { margin: 30px 0 26px; padding: 0; list-style: none; display: grid; gap: 18px; }
+.pg-channel-list li { display: grid; grid-template-columns: 24px 1fr; gap: 14px; align-items: start; border-top: 1px solid var(--border); padding-top: 16px; }
+.pg-channel-list svg { color: var(--chapter-gold); margin-top: 3px; }
+.pg-channel-list span { display: block; color: var(--chapter-muted); font-size: 9px; letter-spacing: .18em; text-transform: uppercase; }
+.pg-channel-list p { margin: 6px 0 0; font-size: 13px; }
+.pg-booking-submit { margin-top: 26px; }
+.pg-booking-aside { border-top: 1px solid var(--border); margin-top: 30px; padding-top: 20px; }
+
+/* Visiting + map */
+.pg-visit-layout { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(30px, 5vw, 74px); align-items: center; }
+.pg-visit-layout + .section-inner { margin-top: clamp(40px, 5vw, 70px); }
+.pg-visit-details { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px 26px; margin: 28px 0 30px; }
+.pg-visit-details div { border-top: 1px solid var(--border); padding-top: 12px; }
+.pg-visit-details.is-stacked, .pg-study-facts.is-stacked, .pg-course-details.is-stacked { grid-template-columns: 1fr; }
+.pg-visit-details dt, .pg-study-facts dt, .pg-course-details dt { color: var(--chapter-muted); font-size: 9px; letter-spacing: .16em; text-transform: uppercase; }
+.pg-visit-details dd, .pg-study-facts dd, .pg-course-details dd { margin: 7px 0 0; font-size: 13px; color: var(--chapter-ink); }
+.pg-map { position: relative; min-height: 340px; border: 1px solid var(--border); background: oklch(.18 .012 46); display: flex; }
+.pg-map-grid { position: absolute; inset: 0; opacity: .3; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 46px 46px; }
+.pg-map-inner { position: relative; margin: auto; max-width: 320px; padding: 30px; text-align: center; color: var(--chapter-muted); }
+.pg-map-inner svg { color: var(--chapter-gold); }
+.pg-map-label { margin: 14px 0 10px; color: var(--chapter-gold); font-size: 9px; letter-spacing: .18em; text-transform: uppercase; }
+.pg-map-copy { margin: 0; font-size: 12px; line-height: 1.7; }
+.pg-map-live { flex-direction: column; gap: 12px; padding: 28px; }
+.pg-map-address { margin: 0; font-size: 14px; }
+.pg-map-link { display: inline-flex; align-items: center; gap: 8px; color: var(--chapter-gold); font-size: 10px; letter-spacing: .14em; text-decoration: none; }
+/* FAQ */
+.pg-faq-section { border-top: 1px solid var(--border); }
+.pg-faq-layout { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: clamp(34px, 5vw, 90px); align-items: start; }
+.pg-faq-intro .pg-heading { margin-bottom: 18px; }
+.pg-faq { border-top: 1px solid var(--border); }
+.pg-faq-item { border-bottom: 1px solid var(--border); }
+.pg-faq-question { padding: 22px 0; font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(19px, 1.8vw, 27px); text-align: left; }
+.pg-faq-question:hover { color: var(--chapter-gold); }
+.pg-faq-answer { padding-bottom: 22px; }
+.pg-faq-answer p { margin: 0; max-width: 720px; color: var(--chapter-muted); font-size: 13px; }
+
+/* CTA band */
+.pg-cta { position: relative; isolation: isolate; padding-block: clamp(80px, 10vw, 150px); border-top: 1px solid var(--border); overflow: hidden; }
+.pg-cta-media, .pg-cta-shade { position: absolute; inset: 0; z-index: 0; }
+.pg-cta-media { opacity: .5; }
+.pg-cta-media > .pg-image { width: 100%; height: 100%; }
+.pg-cta-shade { z-index: 1; background: linear-gradient(0deg, var(--background) 8%, oklch(.15 .011 45 / 68%) 60%, oklch(.15 .011 45 / 72%) 100%); }
+.pg-cta-inner { position: relative; z-index: 2; }
+.pg-cta-inner .pg-heading { max-width: 900px; }
+.pg-cta-support { margin: 22px 0 0; max-width: 560px; color: var(--chapter-muted); font-size: 15px; }
+.pg-cta-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+.pg-cta-note { margin: 26px 0 0; color: var(--chapter-muted); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; }
+
+/* Legal placeholders */
+.pg-legal-layout { display: grid; grid-template-columns: 0.7fr 1.3fr; gap: clamp(34px, 5vw, 90px); align-items: start; }
+.pg-legal-intro .pg-heading { margin-bottom: 20px; }
+.pg-legal-body { display: grid; gap: 0; border-top: 1px solid var(--border); }
+.pg-legal-block { display: grid; grid-template-columns: 56px 1fr; gap: 8px 20px; padding: 26px 0; border-bottom: 1px solid var(--border); }
+.pg-legal-index { grid-row: span 2; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 19px; color: var(--chapter-gold); }
+.pg-legal-block h3 { margin: 0; font-size: clamp(21px, 2vw, 30px); }
+.pg-legal-block p { margin: 0; grid-column: 2; color: var(--chapter-muted); font-size: 13px; }
+.pg-legal-actions { display: flex; flex-wrap: wrap; gap: 14px; padding-top: 30px; }
+/* Responsive ------------------------------------------------------------------ */
+@media (max-width: 1180px) {
+  .pg-service-card.is-narrow { grid-column: span 4; }
+  .pg-service-card.is-narrow .pg-service-image { height: clamp(300px, 33vw, 470px); margin-top: 0; }
+  .pg-area-list, .pg-learn-list { grid-template-columns: 1fr; }
+  .pg-visit-details, .pg-form-summary { gap: 14px 18px; }
+}
+@media (max-width: 1024px) {
+  .pg .section-inner { width: min(100% - 8%, 1440px); }
+  .pg-heading-row { flex-direction: column; align-items: flex-start; gap: 24px; }
+  .pg-heading-row > .pg-muted { max-width: 540px; }
+  .pg-split, .pg-chapter, .pg-contact-layout, .pg-visit-layout, .pg-faq-layout, .pg-legal-layout, .pg-course-row, .pg-ba-grid { grid-template-columns: 1fr; }
+  .pg-split.is-reverse .pg-split-media, .pg-chapter.is-reverse .pg-chapter-media { order: 0; }
+  .pg-service-grid { grid-template-columns: repeat(6, 1fr); gap: 48px 18px; }
+  .pg-service-card, .pg-service-card.is-wide, .pg-service-card.is-narrow { grid-column: span 3; }
+  .pg-course-grid, .pg-course-grid.is-compact { grid-template-columns: repeat(4, 1fr); gap: 40px 16px; }
+  .pg-course-card, .pg-course-card.span-1, .pg-course-card.span-4, .pg-course-grid.is-compact .pg-course-card { grid-column: span 2; }
+  .pg-service-notes, .pg-service-notes-grid { grid-template-columns: repeat(2, 1fr); }
+  .pg-faq { margin-top: 30px; }
+  .pg-map { min-height: 300px; }
+}
+@media (max-width: 767px) {
+  .pg .section-inner { width: calc(100% - 40px); }
+  .pg-hero { min-height: 64svh; padding: 116px 0 54px; }
+  .pg-hero.is-compact { min-height: 52svh; padding-block: 104px 46px; }
+  .pg-hero-support { font-size: 14px; margin-top: 18px; }
+  .pg-hero-title { margin-top: 16px; }
+  .pg-hero-actions, .pg-cta-actions, .pg-form-success-actions { gap: 10px; }
+  .pg-hero-note { right: 20px; bottom: 12px; font-size: 7px; }
+  .pg-label { font-size: 8px; gap: 12px; }
+  .pg-section { padding-block: 66px; }
+  .pg-chapter-copy h3 { font-size: clamp(26px, 7vw, 38px); }
+  .pg-experience-step { grid-template-columns: 40px 1fr; gap: 12px; padding: 20px 0; }
+  .pg-flow { grid-template-columns: 1fr; gap: 22px; }
+  .pg-service-grid { grid-template-columns: repeat(2, 1fr); gap: 38px 13px; }
+  .pg-service-card, .pg-service-card.is-wide, .pg-service-card.is-narrow { grid-column: auto; }
+  .pg-service-card.is-wide { grid-column: span 2; }
+  .pg-service-image, .pg-service-card.is-narrow .pg-service-image { height: 55vw; margin-top: 0; }
+  .pg-service-card.is-wide .pg-service-image { height: 80vw; }
+  .pg-service-card .service-meta, .pg-service-meta { grid-template-columns: 24px 1fr 18px; gap: 6px; }
+  .pg-service-card .service-meta h3 { font-size: clamp(22px, 6vw, 32px); }
+  .pg-course-grid, .pg-course-grid.is-compact { grid-template-columns: 1fr; }
+  .pg-course-card, .pg-course-card.span-1, .pg-course-card.span-4, .pg-course-grid.is-compact .pg-course-card { grid-column: auto; }
+  .pg-course-details, .pg-visit-details, .pg-form-grid, .pg-form-summary, .pg-service-notes, .pg-service-notes-grid, .pg-ba-grid, .pg-area-list, .pg-learn-list, .pg-principle-grid, .pg-artistry-foot, .pg-study { grid-template-columns: 1fr; }
+  .pg-study.is-reverse .pg-study-media { order: 0; }
+  .pg-card-course-row, .pg-course-row { padding: 22px 0; }
+  .pg-related-grid, .pg-related-grid.is-categories { grid-template-columns: repeat(2, 1fr); gap: 20px 13px; }
+  .pg-related-card.is-wide { grid-template-columns: 1fr; }
+  .pg-map { min-height: 260px; }
+  .pg-form-success { padding: 22px 18px; }
+  .pg-contact-form { min-width: 0; }
+  .pg .site-footer { padding-bottom: 130px; }
+}
+@media (max-width: 380px) {
+  .pg-hero-title { font-size: 46px; }
+  .pg-hero-actions .inline-flex, .pg-cta-actions .inline-flex { width: 100%; }
+  .pg-area, .pg-learn-item { grid-template-columns: 34px 1fr; }
+  .pg-service-card .service-meta h3 { font-size: 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pg [data-reveal] { opacity: 1; transform: none; transition: none; }
+  .pg-transition { animation: none; }
+  .pg-gallery-tile .editorial-image img, .pg-service-card .editorial-image img { transition: none; }
+}
+

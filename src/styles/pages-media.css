@@ -1,0 +1,72 @@
+/*
+ * Inner-page imagery: registry frames, editorial grids, gallery, lightbox.
+ * Imported by styles.css.
+ */
+.pg-image { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--secondary); }
+.pg-image .editorial-image { width: 100%; height: 100%; }
+.pg-image-label { position: absolute; left: 12px; bottom: 12px; z-index: 2; padding: 5px 9px; background: oklch(.12 .01 45 / 74%); color: var(--chapter-gold); font-size: 7px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+.pg-image.has-mobile-crop .editorial-image img { object-position: var(--pg-mobile-position); }
+.pg-grid { display: grid; gap: 14px; margin: 40px 0 0; }
+.pg-grid.is-duo { grid-template-columns: repeat(2, 1fr); }
+.pg-grid.is-trio { grid-template-columns: repeat(3, 1fr); }
+.pg-grid.is-editorial, .pg-grid.is-mosaic { grid-template-columns: repeat(12, 1fr); }
+.pg-grid-item { position: relative; min-width: 0; height: clamp(210px, 24vw, 400px); }
+.pg-grid.is-duo .pg-grid-item { height: clamp(280px, 34vw, 520px); }
+.pg-grid.is-trio .pg-grid-item { height: clamp(240px, 28vw, 430px); }
+.pg-grid.is-editorial .span-1 { grid-column: span 7; height: clamp(300px, 38vw, 560px); }
+.pg-grid.is-editorial .span-2 { grid-column: span 5; }
+.pg-grid.is-editorial .span-3 { grid-column: span 5; }
+.pg-grid.is-editorial .span-4 { grid-column: span 7; }
+.pg-grid.is-editorial .span-5, .pg-grid.is-editorial .span-6 { grid-column: span 6; }
+.pg-grid.is-mosaic .span-1, .pg-grid.is-mosaic .span-6 { grid-column: span 6; }
+.pg-grid.is-mosaic .span-2, .pg-grid.is-mosaic .span-3, .pg-grid.is-mosaic .span-4 { grid-column: span 4; }
+.pg-grid.is-mosaic .span-5 { grid-column: span 8; }
+
+/* Gallery grid + lightbox */
+.pg-gallery-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; margin-top: 40px; }
+.pg-gallery-tile { position: relative; grid-column: span 4; height: clamp(230px, 26vw, 420px); padding: 0; border: 0; background: var(--secondary); cursor: zoom-in; overflow: hidden; }
+.pg-gallery-tile.span-1, .pg-gallery-tile.span-4, .pg-gallery-tile.span-6 { grid-column: span 6; }
+.pg-gallery-tile.span-2, .pg-gallery-tile.span-5 { grid-column: span 4; }
+.pg-gallery-tile.span-3, .pg-gallery-tile.span-7 { grid-column: span 3; }
+.pg-gallery-tile .editorial-image img { transition: transform .7s cubic-bezier(.2,.7,.2,1); }
+.pg-gallery-tile:hover .editorial-image img { transform: scale(1.05); }
+.pg-lightbox { width: min(94vw, 1180px); max-width: none; padding: 0; border: 0; background: oklch(.11 .01 45); }
+.pg-lightbox-image { display: block; width: 100%; max-height: 76svh; object-fit: contain; }
+.pg-lightbox-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 18px; border-top: 1px solid var(--border); }
+.pg-lightbox-label { color: var(--chapter-gold); font-size: 8px; letter-spacing: .18em; text-transform: uppercase; }
+.pg-lightbox-nav { display: flex; align-items: center; gap: 16px; color: var(--chapter-muted); font-size: 10px; letter-spacing: .14em; }
+.pg-lightbox-nav button { display: grid; place-items: center; width: 34px; height: 34px; background: transparent; border: 1px solid var(--border); color: var(--chapter-ink); cursor: pointer; }
+.pg-lightbox-nav button:hover { border-color: var(--chapter-gold); color: var(--chapter-gold); }
+/* Category archive cards */
+.pg-category-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: clamp(28px, 3vw, 54px) 18px; }
+.pg-category-card { grid-column: span 4; display: block; min-width: 0; color: var(--chapter-ink); text-decoration: none; }
+.pg-category-card.span-1, .pg-category-card.span-4 { grid-column: span 6; }
+.pg-category-card.span-3, .pg-category-card.span-5 { grid-column: span 3; }
+.pg-category-image { height: clamp(240px, 28vw, 430px); overflow: hidden; background: var(--muted); }
+.pg-category-card.span-1 .pg-category-image, .pg-category-card.span-4 .pg-category-image { height: clamp(300px, 36vw, 540px); }
+.pg-category-card.span-3 .pg-category-image, .pg-category-card.span-5 .pg-category-image { height: clamp(210px, 22vw, 340px); }
+.pg-category-image .editorial-image img { transition: transform .7s cubic-bezier(.2,.7,.2,1); }
+.pg-category-card:hover .pg-category-image .editorial-image img { transform: scale(1.05); }
+.pg-category-meta { display: grid; grid-template-columns: 32px 1fr 20px; gap: 10px; align-items: start; margin-top: 14px; padding-top: 15px; border-top: 1px solid var(--border); }
+.pg-category-index { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; color: var(--chapter-gold); }
+.pg-category-meta h3 { margin: 0; font-size: clamp(21px, 2vw, 29px); line-height: 1.05; }
+.pg-category-meta p { margin: 8px 0 0; color: var(--chapter-muted); font-size: 11px; }
+.pg-category-meta svg { color: var(--chapter-gold); transition: transform .25s ease; }
+.pg-category-card:hover .pg-category-meta svg { transform: translate(3px,-3px); }
+.pg-archive { border-top: 0; }
+
+/* Related cards (gallery + portfolio cross-links) */
+.pg-related-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; margin-top: 12px; }
+.pg-related-grid.is-categories { grid-template-columns: repeat(4, 1fr); }
+.pg-related-card { display: grid; gap: 12px; min-width: 0; color: var(--chapter-ink); text-decoration: none; }
+.pg-related-card.is-wide { grid-template-columns: 0.9fr 1.1fr; align-items: center; gap: clamp(20px, 3vw, 48px); }
+.pg-related-image { height: clamp(190px, 20vw, 320px); overflow: hidden; background: var(--muted); }
+.pg-related-card.is-wide .pg-related-image { height: clamp(220px, 26vw, 400px); }
+.pg-related-image .editorial-image img { transition: transform .7s cubic-bezier(.2,.7,.2,1); }
+.pg-related-card:hover .pg-related-image .editorial-image img { transform: scale(1.05); }
+.pg-related-meta { position: relative; padding-top: 14px; border-top: 1px solid var(--border); }
+.pg-related-meta h3 { margin: 0; font-size: clamp(19px, 1.8vw, 26px); line-height: 1.1; }
+.pg-related-meta p { margin: 8px 0 0; color: var(--chapter-muted); font-size: 11px; }
+.pg-related-meta svg { position: absolute; top: 14px; right: 0; color: var(--chapter-gold); }
+.pg-related-card:hover .pg-related-meta h3 { color: var(--chapter-gold); }
+.pg-related .editorial-link { margin-top: 34px; }

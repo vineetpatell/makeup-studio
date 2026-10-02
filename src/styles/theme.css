@@ -1,0 +1,842 @@
+/*
+ * Homepage visual system: palette, type, spacing, image frames and the
+ * continuously moving marquee.
+ *
+ * Three rules govern everything here:
+ *
+ *  1. Visibility is never an animation's job. There is no `opacity: 0` on any
+ *     image, no clip-path reveal and no `visibility: hidden` anywhere in this
+ *     file. If JavaScript never runs, or a trigger never fires, the page is
+ *     still completely readable — animation only ever enhances.
+ *  2. Sections are content-driven. `padding-block` comes from the spacing scale;
+ *     no section carries a `min-height: 100vh` or a fixed pixel height, so a
+ *     section always ends with its content.
+ *  3. One spacing scale, used everywhere. No ad-hoc 300px/500px margins.
+ *
+ * Type: Syne carries the brand voice (display + the M.A. mark), Manrope handles
+ * all UI and body copy, and Cormorant Garamond italic appears only as an
+ * emotional accent. Three levels, no competition.
+ */
+
+:root {
+  /* Palette — cream / forest / champagne, terracotta as accent only */
+  --cream: oklch(0.9513 0.0136 78.3); /* #F4EEE5 */
+  --cream-soft: oklch(0.9656 0.0131 82.4); /* #F8F3EA */
+  --ivory: oklch(0.9846 0.0124 75.4); /* #FFF9F1 */
+  --forest: oklch(0.2368 0.0297 165.1); /* #10231B */
+  --forest-deep: oklch(0.1663 0.0219 167); /* #09130F */
+  --green-muted: oklch(0.3814 0.0304 162.8); /* #34483E */
+  /* Body/secondary text on the light surfaces. `--taupe` below is kept for
+     hairlines and decorative rules only: at L .6066 it lands around 3.3:1 on
+     cream, under the 4.5:1 WCAG AA floor for text this size. This pair holds
+     4.8:1 on cream, 5.0:1 on cream-soft and 5.3:1 on ivory. */
+  --taupe-text: oklch(0.52 0.0253 71.6);
+  --taupe: oklch(0.6066 0.0253 71.6); /* #8C8072 */
+  --champagne: oklch(0.7392 0.0872 78); /* #C9A46A */
+  --champagne-muted: oklch(0.6503 0.0742 75.1); /* #AA895B */
+  --terracotta: oklch(0.52 0.128 44.1); /* #C96E45, deepened for AA text */
+
+  /* Type */
+  --font-display: "Syne", "Manrope", system-ui, sans-serif;
+  --font-sans: "Manrope", "Segoe UI", system-ui, sans-serif;
+  --font-accent: "Cormorant Garamond", Georgia, serif;
+
+  /* Spacing scale — the only vertical rhythm in the layout */
+  --space-xs: 0.5rem;
+  --space-sm: 0.875rem;
+  --space-md: 1.5rem;
+  --space-lg: clamp(1.75rem, 3vw, 2.75rem);
+  --space-xl: clamp(2.5rem, 5vw, 4.5rem);
+  --space-2xl: clamp(3.5rem, 7vw, 6.5rem);
+
+  /* Frames */
+  --frame-radius: 22px;
+  --frame-line: oklch(0.2368 0.0297 165.1 / 0.14);
+  --frame-bg: oklch(0.925 0.016 78);
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* ---------------------------------------------------------------- tone ---- */
+.home-chapters {
+  --ink: var(--forest);
+  --ink-soft: var(--taupe-text);
+  --accent: var(--terracotta);
+  --surface: var(--cream);
+  color: var(--ink);
+  background: var(--forest-deep);
+  font-family: var(--font-sans);
+}
+
+.home-chapters > section,
+.home-chapters > .band {
+  background: var(--surface);
+  /* Own the ink explicitly. The legacy Phase-2 sheet in styles.css sets
+     `color: --chapter-ink` (cream) on `.home-chapters` itself, and because
+     `@import` hoists this file above it, that rule wins on `.home-chapters`
+     and was inherited as cream-on-cream by anything without its own colour.
+     Declaring it per section beats inheritance outright. */
+  color: var(--ink);
+  /* Re-point the legacy Phase-2 tokens at the current palette, per section.
+     Anything still written against them (the shared `.editorial-link`,
+     `.editorial-primary`) now follows `--ink`/`--accent` and therefore flips
+     correctly on the dark sections too, instead of being frozen to the old
+     cream-and-gold-on-near-black values. */
+  --chapter-bg: var(--surface);
+  --chapter-ink: var(--ink);
+  --chapter-gold: var(--accent);
+  --chapter-muted: var(--ink-soft);
+  /* Content-driven: no min-height, no fixed height. */
+  padding-block: var(--space-xl);
+}
+
+.intro-section {
+  --surface: var(--cream);
+}
+.band--editorial {
+  --surface: var(--cream-soft);
+}
+.work-section {
+  --surface: var(--cream);
+}
+.band--work {
+  --surface: var(--ivory);
+}
+.experience-section {
+  --surface: var(--cream-soft);
+}
+.academy-section {
+  --surface: var(--cream);
+}
+.proof-section {
+  --surface: var(--ivory);
+}
+
+/* Dark sections: flip the ink and the frame hairline once, here. */
+.services-section,
+.studio-section {
+  --surface: var(--forest);
+  --ink: var(--ivory);
+  --ink-soft: oklch(0.85 0.02 80);
+  --accent: var(--champagne);
+  --frame-line: oklch(0.9846 0.0124 75.4 / 0.16);
+  --frame-bg: oklch(0.22 0.026 165);
+}
+
+.closing-section {
+  --surface: var(--forest-deep);
+  --ink: var(--ivory);
+  --ink-soft: oklch(0.85 0.02 80);
+  --accent: var(--champagne);
+  --frame-line: oklch(0.9846 0.0124 75.4 / 0.16);
+  --frame-bg: oklch(0.2 0.024 166);
+}
+
+.section-inner {
+  width: min(100% - 8%, 1280px);
+  margin-inline: auto;
+}
+
+/* ------------------------------------------------------------ typography -- */
+.home-chapters h1,
+.home-chapters h2,
+.home-chapters h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 0.94;
+  color: var(--ink);
+  margin: 0;
+}
+
+.home-chapters h2 {
+  /* The lower bound tracks the viewport instead of sitting at a fixed 2.5rem.
+     A 40px floor overflowed the 375–390px column (the longest word needed 436px
+     in 359px), and `.band { overflow: hidden }` silently ate the last letter.
+     ~8.2vw keeps the full phrase inside the column down to 320px. */
+  font-size: clamp(1.85rem, 8.2vw, 5.2rem);
+}
+
+@media (min-width: 901px) {
+  /* `.band-head` is two-up above 900px, and the title column is only ~0.54vw
+     wide once the 1fr/0.6fr split and the `--space-xl` gutter are applied.
+     "TRANSFORMATION." is one unbreakable word ≈ 10.9 × font-size, so the
+     shared 5.2rem h2 ceiling (906px at 1440) overran the column and printed
+     over `.band-aside`. 4.8vw capped at 4.25rem keeps the longest line inside
+     the column at every two-up width (43px @ 901, 49px @ 1024, 68px @ 1440). */
+  .home-chapters .band-title {
+    font-size: min(4.8vw, 4.25rem);
+  }
+}
+
+.home-chapters h3 {
+  font-size: clamp(1.15rem, 1.5vw, 1.45rem);
+  letter-spacing: -0.02em;
+}
+
+/* Emotional accent only — never a whole paragraph. */
+.home-chapters h2 em,
+.home-chapters h3 em {
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--accent);
+}
+
+.home-chapters p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  line-height: 1.8;
+  max-width: 46ch;
+}
+
+.home-chapters .chapter-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 var(--space-md);
+  /* Scoped to `.home-chapters` on purpose: these labels are <p> elements, so
+     the bare `.chapter-label` rule (0,1,0) loses to `.home-chapters p`
+     (0,1,1) and the accent silently fell back to the body ink. */
+  color: var(--accent);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.home-chapters .chapter-label > span:first-child {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  padding-inline: 8px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+}
+
+.section-head {
+  display: grid;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.section-head--split {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+  align-items: end;
+  column-gap: var(--space-lg);
+}
+
+.section-head--split .chapter-label {
+  grid-column: 1 / -1;
+  margin-bottom: 0;
+}
+
+.section-head p {
+  max-width: 34ch;
+}
+
+.section-foot {
+  margin-top: var(--space-lg);
+}
+
+/* ------------------------------------------------------------ brand mark -- */
+.brand-mark {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.brand-mark span {
+  color: var(--accent);
+  margin-inline: 0.06em;
+}
+
+/* ------------------------------------------------------------- the frame -- */
+.frame {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--frame-line);
+  border-radius: var(--frame-radius);
+  background: var(--frame-bg);
+}
+
+.frame > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Always visible. Loading never depends on animation. */
+  opacity: 1;
+}
+
+.frame--portrait {
+  aspect-ratio: 4 / 5;
+}
+.frame--tall {
+  aspect-ratio: 3 / 4;
+}
+.frame--square {
+  aspect-ratio: 1 / 1;
+}
+.frame--landscape {
+  aspect-ratio: 3 / 2;
+}
+.frame--wide {
+  aspect-ratio: 16 / 9;
+}
+
+.card-number {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  min-width: 30px;
+  height: 30px;
+  padding-inline: 8px;
+  border-radius: 999px;
+  background: oklch(0.9846 0.0124 75.4 / 0.92);
+  color: var(--forest);
+  font-family: var(--font-display);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.media-caption {
+  margin-top: var(--space-sm);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-align: right;
+}
+/* ------------------------------------------------------------- 02 intro -- */
+.intro-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: var(--space-lg) var(--space-xl);
+  align-items: start;
+}
+
+.intro-lede {
+  display: grid;
+  gap: var(--space-md);
+  align-content: start;
+}
+
+.intro-statement {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+
+.intro-frame {
+  grid-column: 1;
+  width: 100%;
+}
+
+/* ---------------------------------------------------------- 03 services -- *
+ * Seven cards fill three columns exactly: card 1 is a full-width feature,
+ * cards 2-7 are two flush rows of three. No ragged edge, no holes. */
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-lg) var(--space-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.service-grid > li {
+  min-width: 0;
+}
+
+.service-grid > li:first-child {
+  grid-column: 1 / -1;
+}
+
+.service-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.service-card:hover .frame > img {
+  transform: scale(1.04);
+}
+
+.frame > img {
+  transition: transform 0.8s var(--ease);
+}
+
+.service-meta {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 14px;
+  align-items: start;
+  padding-top: var(--space-sm);
+}
+
+.service-meta h3 {
+  grid-column: 1;
+}
+
+.service-meta p {
+  grid-column: 1;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  max-width: 32ch;
+}
+
+.service-meta svg {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  color: var(--accent);
+  transition: transform 0.35s var(--ease);
+}
+
+.service-card:hover .service-meta svg {
+  transform: translate(3px, -3px);
+}
+
+/* ------------------------------------------------------------- 04 work ---- *
+ * Two columns, two flush rows. The ratio alternates by row (set in markup) so
+ * the grid has rhythm while every row stays perfectly level — no ragged holes. */
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-lg) var(--space-md);
+}
+
+/* ------------------------------------------------------------ 05 journey -- */
+.journey-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.journey-step {
+  border-top: 1px solid var(--frame-line);
+  padding-top: var(--space-sm);
+}
+
+.journey-number {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.journey-number i {
+  width: 26px;
+  height: 1px;
+  background: currentColor;
+}
+
+.journey-step h3 {
+  margin: var(--space-md) 0 6px;
+}
+
+.journey-step p {
+  font-size: 0.8rem;
+}
+
+/* ------------------------------------------------- 06/07 split sections --- */
+.academy-layout,
+.studio-layout,
+.closing-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: var(--space-xl);
+  align-items: center;
+}
+
+.studio-layout {
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+}
+.closing-layout {
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+}
+
+.academy-copy,
+.studio-copy,
+.closing-copy {
+  display: grid;
+  gap: var(--space-md);
+  align-content: center;
+}
+
+.academy-media,
+.studio-frame,
+.closing-frame {
+  width: 100%;
+}
+
+.academy-categories {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--frame-line);
+}
+
+.academy-categories li {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--frame-line);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+}
+
+.academy-categories li span {
+  color: var(--accent);
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+}
+
+.closing-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: var(--space-sm);
+}
+
+/* -------------------------------------------------------------- 08 proof -- */
+.proof-empty {
+  margin-top: var(--space-lg);
+  max-width: 40ch;
+}
+
+.proof-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-lg);
+  margin-top: var(--space-lg);
+}
+
+.proof-grid blockquote {
+  margin: 0;
+}
+
+.proof-grid p {
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-size: 1.3rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.proof-grid cite {
+  display: block;
+  margin-top: var(--space-sm);
+  font-size: 0.625rem;
+  font-style: normal;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* ------------------------------------------------------ carousel bands --- */
+.band {
+  overflow: hidden;
+}
+
+.band-head {
+  display: grid;
+  /* 0.6fr for the aside: its <p> is capped at 38ch (~304px) anyway, so the
+     narrower track is visually identical while handing ~85px back to the
+     title column (see the .band-title rule above). */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.6fr);
+  gap: var(--space-md) var(--space-xl);
+  align-items: end;
+  margin-bottom: var(--space-lg);
+}
+
+.home-chapters .band-eyebrow {
+  grid-column: 1 / -1;
+  margin: 0;
+  /* Same <p>-specificity trap as .chapter-label: this is a <p> too. */
+  color: var(--accent);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.band-aside {
+  display: grid;
+  gap: var(--space-sm);
+  justify-items: start;
+}
+
+.band-aside p {
+  max-width: 38ch;
+}
+
+/* ------------------------------------------------------------- marquee ---- *
+ * The track holds the set twice and is translated 0 -> -50% forever, so the
+ * seam is invisible. No scrolling, no snapping, no buttons. */
+.marquee {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--space-sm);
+  /* Fades at both edges so images enter and leave the composition softly. */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.marquee-set {
+  display: flex;
+  gap: var(--space-md);
+  padding-inline-end: var(--space-md);
+}
+
+.marquee-item {
+  display: block;
+  flex: 0 0 auto;
+  width: clamp(190px, 21vw, 300px);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  /* The grow/shrink is transform-only: nothing reflows, nothing is clipped. */
+  transition: transform 0.5s var(--ease);
+}
+
+.marquee--large .marquee-item {
+  width: clamp(230px, 26vw, 380px);
+}
+
+.marquee-frame {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  border: 1px solid var(--frame-line);
+  border-radius: var(--frame-radius);
+  background: var(--frame-bg);
+  transform: scale(1);
+  transition:
+    transform 0.5s var(--ease),
+    box-shadow 0.5s var(--ease);
+}
+
+.marquee--large .marquee-frame {
+  aspect-ratio: 3 / 4;
+}
+
+.marquee-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 1;
+}
+
+/* Sits below the frame, not inside it — the frame clips its overflow, so a
+   caption placed within it would never be visible. */
+.marquee-caption {
+  display: block;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--frame-line);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 0.625rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-align: left;
+}
+
+/* Focus follows the pointer. Identical for every image in the set. */
+.marquee-item[data-focus="focus"] .marquee-frame {
+  transform: scale(1.08);
+  box-shadow: 0 30px 60px -34px oklch(0.2 0.024 166 / 0.55);
+}
+
+.marquee-item[data-focus="near"] .marquee-frame {
+  transform: scale(0.94);
+}
+
+.marquee-item[data-focus="rest"] .marquee-frame {
+  transform: scale(0.97);
+}
+
+/* ---------------------------------------------------------------- footer -- */
+.site-footer {
+  background: var(--forest-deep);
+  color: var(--ivory);
+  padding-block: var(--space-xl) var(--space-lg);
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: var(--space-xl);
+  padding-bottom: var(--space-xl);
+}
+
+.footer-identity .brand-mark {
+  color: var(--ivory);
+}
+
+.footer-identity p {
+  margin-top: var(--space-sm);
+  color: oklch(0.78 0.02 80);
+}
+
+.footer-columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-lg);
+}
+
+.footer-columns > div {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+
+.footer-label {
+  color: var(--champagne);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.footer-columns a,
+.footer-columns span {
+  color: oklch(0.86 0.015 80);
+  font-size: 0.8125rem;
+  text-decoration: none;
+}
+
+.footer-columns a:hover {
+  color: var(--champagne);
+}
+
+.footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding-top: var(--space-md);
+  border-top: 1px solid oklch(0.9846 0.0124 75.4 / 0.14);
+  color: oklch(0.7 0.015 80);
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.footer-bottom div {
+  display: flex;
+  gap: 18px;
+}
+
+.footer-bottom a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* --------------------------------------------------------------- mobile --- */
+@media (max-width: 900px) {
+  .section-head--split,
+  .band-head,
+  .academy-layout,
+  .studio-layout,
+  .closing-layout,
+  .footer-top,
+  .intro-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .intro-statement,
+  .intro-frame {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .service-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .service-grid > li:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .work-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .journey-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .proof-grid,
+  .footer-columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .marquee-item,
+  .marquee--large .marquee-item {
+    width: 62vw;
+  }
+}
+
+@media (max-width: 480px) {
+  .marquee-item,
+  .marquee--large .marquee-item {
+    width: 74vw;
+  }
+}
+
+/* ------------------------------------------------------- reduced motion --- *
+ * No continuous movement and no transform-based hover; every image stays
+ * framed, visible and fully legible. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    transform: none !important;
+  }
+
+  .marquee-item[data-focus="focus"] .marquee-frame,
+  .marquee-item[data-focus="near"] .marquee-frame,
+  .marquee-item[data-focus="rest"] .marquee-frame,
+  .frame > img,
+  .marquee-frame img,
+  .marquee-frame,
+  .marquee-item,
+  .service-card:hover .frame > img {
+    transform: none !important;
+    transition: none !important;
+  }
+}

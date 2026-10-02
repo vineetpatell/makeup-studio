@@ -1,0 +1,3 @@
+- [ ] Add Phase 2 homepage chapters 02–10 with editable content and editorial imagery.
+- [ ] Prepare navigation destinations without inventing business details.
+- [ ] Verify desktop, tablet, mobile, motion, navigation, and console behavior.
