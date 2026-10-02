@@ -96,14 +96,12 @@ export function SiteFooter() {
           </div>
         </div>
         <div className="footer-bottom">
-          <span>
-            © {new Date().getFullYear()} M·A — {SITE_CONFIG.name.toUpperCase()}
-          </span>
+          <span>© 2026 Never Ending Services. All rights reserved.</span>
           <div>
             <Link to="/privacy">Privacy</Link>
             <Link to="/terms">Terms</Link>
           </div>
-          <span>MADE FOR THE ART OF BECOMING</span>
+          <span>Designed &amp; Developed by Never Ending Services</span>
         </div>
       </div>
     </footer>

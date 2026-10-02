@@ -99,8 +99,8 @@ export function HomeChapters() {
           <div className="intro-lede" data-reveal="md">
             <ChapterLabel number="02">INTRODUCTION</ChapterLabel>
             <p>
-              Professional makeup artistry and makeup education, brought together by one belief:
-              the most compelling transformation reveals what is already yours.
+              Professional makeup artistry and makeup education, brought together by one belief: the
+              most compelling transformation reveals what is already yours.
             </p>
             <TextLink to="/about">DISCOVER OUR APPROACH</TextLink>
           </div>
@@ -222,9 +222,7 @@ export function HomeChapters() {
               <br />
               <em>changes everything.</em>
             </h2>
-            <p data-reveal="sm">
-              Four movements, from the first conversation to the final look.
-            </p>
+            <p data-reveal="sm">Four movements, from the first conversation to the final look.</p>
           </div>
           <ol className="journey-grid">
             {journey.map((step, index) => (
@@ -252,8 +250,8 @@ export function HomeChapters() {
               <em>the art.</em>
             </h2>
             <p data-reveal="sm">
-              Professional makeup education built around practice, technique, and the confidence
-              to find your own creative voice.
+              Professional makeup education built around practice, technique, and the confidence to
+              find your own creative voice.
             </p>
             <ul className="academy-categories" data-reveal="sm">
               {academyCategories.map((category, index) => (
@@ -416,11 +414,12 @@ export function HomeChapters() {
             </div>
           </div>
           <div className="footer-bottom">
-            <span>© {new Date().getFullYear()} M·A — MAKEUP ARTISTRY &amp; EDUCATION</span>
+            <span>© 2026 Never Ending Services. All rights reserved.</span>
             <div>
               <Link to="/privacy">Privacy</Link>
               <Link to="/terms">Terms</Link>
             </div>
+            <span>Designed &amp; Developed by Never Ending Services</span>
           </div>
         </div>
       </footer>
@@ -428,12 +427,14 @@ export function HomeChapters() {
       <div className="mobile-actions" aria-label="Quick actions">
         <Button asChild variant="ghost">
           <Link to="/contact">
-            <Phone size={16} aria-hidden="true" />CALL
+            <Phone size={16} aria-hidden="true" />
+            CALL
           </Link>
         </Button>
         <Button asChild variant="ghost">
           <Link to="/contact">
-            <MessageCircle size={16} aria-hidden="true" />WHATSAPP
+            <MessageCircle size={16} aria-hidden="true" />
+            WHATSAPP
           </Link>
         </Button>
         <Button asChild>

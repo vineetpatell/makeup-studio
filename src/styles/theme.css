@@ -768,6 +768,16 @@
   text-decoration: none;
 }
 
+/* The fixed mobile action bar (styles.css) overlays the document tail;
+   reserve its height plus a little breathing room so the last footer rows —
+   the copyright and the Never Ending Services credit — stay fully readable
+   when the page is scrolled to the end at <=767px. */
+@media (max-width: 767px) {
+  .site-footer {
+    padding-bottom: calc(var(--space-lg) + 78px + env(safe-area-inset-bottom));
+  }
+}
+
 /* --------------------------------------------------------------- mobile --- */
 @media (max-width: 900px) {
   .section-head--split,
