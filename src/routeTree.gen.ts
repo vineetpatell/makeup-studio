@@ -34,7 +34,7 @@ const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
-  id: '/about', 
+  id: '/about',
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
