@@ -1,7 +1,9 @@
 {
   "name": "tanstack_start_ts",
   "private": true,
-  "sideEffects": false,
+  "sideEffects": [
+    "./src/lib/gsap.ts"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite dev",
